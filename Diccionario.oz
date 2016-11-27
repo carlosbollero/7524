@@ -21,7 +21,7 @@ local
       end
    end
    fun {Get Dict Key}
-      case Dict of nil then 0 %notfound
+      case Dict of nil then 0
       [] tree(K V _ _) andthen Key == K then
 	 V
       [] tree(K _ L _) andthen Key < K then
