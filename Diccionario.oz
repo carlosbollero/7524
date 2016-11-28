@@ -9,11 +9,9 @@ local
    end
    fun {Put Key Dict}
       case Dict of nil then tree(Key 1 nil nil)
-      [] tree(K _ L R) andthen Key == K then
-	 local Value = {Get Dict Key} in
-	    {Browse Value}
-	    tree(Key Value+1 L R)
-	 end
+      [] tree(K V L R) andthen Key == K then
+	 {Browse V}
+	 tree(Key V+1 L R)
       [] tree(K V L R) andthen Key < K then
 	 tree(K V {Put Key L} R)
       [] tree(K V L R) andthen Key > K then
@@ -38,8 +36,7 @@ local
 	 {Domain R}
       end
    end
-   
-   
+
 in
    Diccionario = dict(new:NewDict put:Put insertList:InsertList get:Get domain:Domain)
 end
