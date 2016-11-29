@@ -1,4 +1,4 @@
-declare
+ByFreqdeclare
 local
    fun {NewDict} nil end
    fun {InsertList List Dict}
@@ -28,23 +28,53 @@ local
 	 {Get R Key}
       end
    end
-   proc {Domain Dict}
+   proc {Print Dict}
       case Dict of nil then skip
       [] tree(K V L R) then
-	 {Domain L}
+	 {Print L}
 	 {Browse (K#V)}
-	 {Domain R}
+	 {Print R}
       end
    end
-
+   fun {PutByValue Key Value D}
+      case D of nil then tree(Key Value nil nil)
+      [] tree(K V L R) andthen Value < V then
+	 tree(K V {PutByValue Key Value L} R)
+      [] tree(K V L R) andthen Value > V then
+	 tree(K V L {PutByValue Key Value R})
+      [] tree(K V L R) andthen Value == V then
+	 if Key < K then
+	    tree(K V {PutByValue Key Value L} R)
+	 else
+	    tree(K V L {PutByValue Key Value R})
+	 end
+      end
+   end
+   fun {Domain Dict}
+      local
+	 fun {SortByFreq Orig New}
+	    case Orig of nil then New
+	    [] tree(Key Value Left Right) then
+	       {SortByFreq Right {SortByFreq Left {PutByValue Key Value New}}}
+	    end
+	 end      
+      in
+	 {SortByFreq Dict {NewDict}}
+      end
+   end
+   
+   
 in
-   Diccionario = dict(new:NewDict put:Put insertList:InsertList get:Get domain:Domain)
+   Diccionario = dict(new:NewDict put:Put insertList:InsertList get:Get domain:Domain print:Print)
 end
 
 F = {Diccionario.insertList [h a s f a d r a s r] {Diccionario.new}}
-{Browse F}
-{Diccionario.domain F}
+%{Browse F}
+%{Diccionario.domain F}
 
 A = {Diccionario.insertList [j f r g b f h j i] F}
-{Browse A}
-{Diccionario.domain A}
+%{Browse A}
+{Diccionario.print A}
+{Browse '--------------'}
+B = {Diccionario.domain A}
+{Diccionario.print B}
