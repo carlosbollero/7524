@@ -7,10 +7,10 @@ local
 	 {InsertList T {Put H Dict}}
       end
    end
+   % Inserta ordenado por clave
    fun {Put Key Dict}
       case Dict of nil then tree(Key 1 nil nil)
       [] tree(K V L R) andthen Key == K then
-	 {Browse V}
 	 tree(Key V+1 L R)
       [] tree(K V L R) andthen Key < K then
 	 tree(K V {Put Key L} R)
@@ -36,6 +36,7 @@ local
 	 {Print R}
       end
    end
+   % Inserta por Valor y en caso de iguales, por clave 
    fun {PutByValue Key Value D}
       case D of nil then tree(Key Value nil nil)
       [] tree(K V L R) andthen Value < V then
@@ -68,13 +69,14 @@ in
    Diccionario = dict(new:NewDict put:Put insertList:InsertList get:Get domain:Domain print:Print)
 end
 
-F = {Diccionario.insertList [h a s f a d r a s r] {Diccionario.new}}
-%{Browse F}
-%{Diccionario.domain F}
-
-A = {Diccionario.insertList [j f r g b f h j i] F}
-%{Browse A}
-{Diccionario.print A}
-{Browse '--------------'}
-B = {Diccionario.domain A}
-{Diccionario.print B}
+proc {Prog List}
+   local Dic Dom in
+      {Browse '----Diccionario----'}
+      Dic = {Diccionario.insertList List {Diccionario.new}}
+      {Diccionario.print Dic}
+      {Browse '------En Orden------'}
+      Dom = {Diccionario.domain Dic}
+      {Diccionario.print Dom}
+   end      
+end
+{Prog [a s a a a r d h j m x x m f r r f o p h q q d r c a f h m]}
