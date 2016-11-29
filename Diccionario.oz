@@ -1,4 +1,4 @@
-ByFreqdeclare
+declare
 local
    fun {NewDict} nil end
    fun {InsertList List Dict}
